@@ -1,0 +1,15 @@
+pytest
+pytest-pep8
+flask
+requests
+datetime
+sphinx
+testfixtures
+matplotlib
+pillow
+stringdist
+pymodm
+dnspython
+scikit-image
+numpy
+sphinx
