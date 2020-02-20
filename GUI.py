@@ -53,7 +53,8 @@ def design_window():
             messagebox.showerror('Error - Missing User',
                                  'User not in database, make sure to click '
                                  'enter after adding ID!')
-        messagebox.showinfo('CALIBRATE', 'Calibrating system.')
+        else:
+            messagebox.showinfo('CALIBRATE', 'Calibrating system.')
 
 
 
@@ -85,6 +86,8 @@ def design_window():
             messagebox.showerror('Error - Missing User',
                                  'User not in database, make sure to click '
                                  'enter after adding ID!')
+        else:
+            stop_rec(user)
 
     def download_btn_action():
         """Actions performed when the download button is clicked
@@ -98,7 +101,8 @@ def design_window():
             messagebox.showerror('Error - Missing User',
                                  'User not in database, make sure to click '
                                  'enter after adding ID!')
-
+        else:
+            download_data(user)
 
 
 
