@@ -7,12 +7,11 @@ import zipfile
 from zipfile import ZipFile
 import shutil
 import os.path
-from datetime import datetime
-from PIL import ImageTk, Image
 import os
 import io
 from matplotlib import pyplot as plt
 import matplotlib.image as mpimg
+from SWV_calc import *
 
 d = {}
 session_menu = {}
@@ -121,6 +120,7 @@ def design_window():
         root.destroy()
         return
 
+
 # FEATURES OF BUTTON ACTIONS
     def start_rec(user):
         """
@@ -200,17 +200,18 @@ def design_window():
             messagebox.showerror('Error - Missing User',
                                  'User not in database, make sure to click '
                                  'enter after adding ID!')
-        elif selected == '':
-            messagebox.showerror('Error', 'Please select images.')
-            return
-        elif len(selected) > 0:
-            if len(selected) > 1:
-                messagebox.showerror('Error - Multiple Files',
-                                     'Please select only one file!')
-            else:
+        # elif selected == '':
+        #     messagebox.showerror('Error', 'Please select images.')
+        #     return
+        # elif len(selected) > 0:
+        #     if len(selected) > 1:
+        #         messagebox.showerror('Error - Multiple Files',
+        #                              'Please select only one file!')
+            # else:
                 # enter code for real-time plotting here
-                data = [0, 0, 0, 0, 0]
-                plot_data(data, selected[0])
+        xdata = [1, 2, 3, 4, 5]
+        ydata = [1, 2, 3, 4, 5]
+        plot_data(xdata, ydata)
 
 
 # WINDOW DESIGN
@@ -274,9 +275,12 @@ def design_window():
     return
 
 
-def plot_data(b64, filename):
+def plot_data(xdata, ydata):
     """
     """
+    # need to decide what to call here
+    rig = SWV_to_rig(0)
+    plt.plot(([1, 2, 3, 4, 5], [1, 2, 3, 4, 5]))
     plt.show()
 
 
