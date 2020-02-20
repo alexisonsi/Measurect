@@ -15,9 +15,9 @@ from matplotlib import pyplot as plt
 import matplotlib.image as mpimg
 
 d = {}
-image_menu = {}
-image_menu['values'] = {}
-image_menu['temp'] = []
+session_menu = {}
+session_menu['values'] = {}
+session_menu['temp'] = []
 
 
 def define_users():
@@ -32,7 +32,7 @@ def define_users():
     for id in id_list:
         d[id] = {}
         d[id]['Filenames'] = []
-        image_menu['values'] = []
+        session_menu['values'] = []
 
 
 def design_window():
@@ -44,14 +44,6 @@ def design_window():
     def enter_btn_action():
         """Actions performed when the enter button is clicked
 
-        This feature contains all actions completed by the "Enter" button. When
-        this button is clicked all users are pulled from the database for
-        comparison for the user that is inputed into the user id box. First,
-        the input into the user id box is checked. If there is no entry an
-        error box pops up, telling the user they need to enter an id. If the
-        entered id is a new user the user will be welcomed and told to upload
-        a picture to begin. If it is a returning user they will be welcomed
-        back and all images currently on file are pulled up.
         """
         define_users()
         file_list.delete(0, 'end')
@@ -181,9 +173,9 @@ def design_window():
             define_users()
             filelist = []
             for val in filelist:
-                if val not in image_menu['temp']:
+                if val not in session_menu['temp']:
                     file_list.insert(END, val)
-                    image_menu['temp'] += (val,)
+                    session_menu['temp'] += (val,)
 
 
     def plot_action():
