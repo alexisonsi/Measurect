@@ -28,10 +28,10 @@ def define_users():
     added to each users dictionary. This dictionary is used as a placeholder
     before everything is added to the database.
     """
-    id_list = generate_id_list()
+    id_list = []
     for id in id_list:
         d[id] = {}
-        d[id]['Filenames'] = generate_image_list(id)
+        d[id]['Filenames'] = []
         image_menu['values'] = []
 
 
@@ -54,7 +54,7 @@ def design_window():
         back and all images currently on file are pulled up.
         """
         define_users()
-        image_list.delete(0, 'end')
+        file_list.delete(0, 'end')
         user = user_id.get()
         if user == '':
             messagebox.showerror('Error - Missing Field',
@@ -80,11 +80,7 @@ def design_window():
             messagebox.showerror('Error - Missing User',
                                  'User not in database, make sure to click '
                                  'enter after adding ID!')
-        else:
-            paths = file_path(root)
-            save_path(paths, image_menu, user)
-            if paths != '':
-                messagebox.showinfo('Upload Complete', 'Files Uploaded!')
+
 
     def start_btn_action():
         """Actions performed when the start button is clicked
@@ -132,13 +128,8 @@ def design_window():
     def start_rec(user):
         """
         """
-        if user not in d:
-            messagebox.showerror('Error', 'User does not exist!')
-            return
-        selected = select()
-        if selected == '':
-            messagebox.showerror('Error', 'Please choose files to display.')
-            return
+        # insert code to start recording
+        messagebox.showinfo('Measurements started.')
         root.mainloop()
         return
 
@@ -146,24 +137,13 @@ def design_window():
     def stop_rec(user, dtype):
         """
         """
-        if user not in d:
-            messagebox.showerror('Error', 'User does not exist!')
-            return
-        selected = select()
-        if selected == []:
-            messagebox.showerror('Error', 'Please select images.')
-            return
-        if len(selected) == 1:
-            get_files(user, selected[0], dtype)
-        else:
-            for filename in selected:
-                get_files(user, filename, dtype)
-            save_to_zip(selected, dtype)
-        messagebox.showinfo('Download Complete', 'Images Downloaded to Current'
-                            ' Directory!')
+        # insert code to stop recording
+        messagebox.showinfo('Measurements stopped.')
+        root.mainloop()
+        return
 
-    def select():
-        """Select the highlighted files from the images box
+    def select(): # this would give us the option to select multiple sessions
+        """Select the highlighted files from the session box
 
         This saves all the selected files in the file box so that the user
         can select what action they would like for the files.
@@ -171,40 +151,38 @@ def design_window():
         Returns
         -------
         list
-            Contains list of all file selected
+            Contains list of all files selected
         """
         reslist = list()
         selected = []
-        seleccion = image_list.curselection()
+        seleccion = file_list.curselection()
         for i in seleccion:
-            entrada = image_list.get(i)
+            entrada = file_list.get(i)
             reslist.append(entrada)
         for val in reslist:
             selected.append(val)
         return selected
 
+# we may not need this
     def refresh():
         """Refresh user information
 
         This feature is used to refresh the user information, bringing up the
         filenames saved in the database and appending the added files to
-        the image menu.
+        the menu.
         """
         user = user_id.get()
-        users = generate_id_list()
+        users = []
         if user == '':
             messagebox.showerror('Error - Missing Field',
                                  'Please enter a valid User ID')
-        elif user not in users:
-            messagebox.showerror('Error - New User',
-                                 'New User, make sure to upload and refresh to'
-                                 ' view information!')
+
         else:
             define_users()
-            filelist = generate_image_list(user)
+            filelist = []
             for val in filelist:
                 if val not in image_menu['temp']:
-                    image_list.insert(END, val)
+                    file_list.insert(END, val)
                     image_menu['temp'] += (val,)
 
 
@@ -229,8 +207,8 @@ def design_window():
                                      'Please select only one file!')
             else:
                 # enter code for real-time plotting here
-                b64 = view_histogram(user, selected[0])
-                plot_data(b64, selected[0])
+                data = [0, 0, 0, 0, 0]
+                plot_data(data, selected[0])
 
 
 # WINDOW DESIGN
@@ -270,13 +248,13 @@ def design_window():
     image_label = ttk.Label(root, text="Sessions:")
     image_label.grid(column=0, row=6, sticky=W, pady=(20, 20))
 
-    image_list = Listbox(root, selectmode=MULTIPLE, width=45, height=5)
-    image_list.grid(column=1, row=6, sticky=W, columnspan=2, pady=(20, 20))
+    file_list = Listbox(root, selectmode=MULTIPLE, width=45, height=5)
+    file_list.grid(column=1, row=6, sticky=W, columnspan=2, pady=(20, 20))
 
     refresh_btn = ttk.Button(root, text="Refresh", command=refresh)
     refresh_btn.grid(column=1, row=7, sticky=W)
 
-    process_label = ttk.Label(root, text="Drop-down Menu:")
+    process_label = ttk.Label(root, text="Drop-Down Menu:")
     process_label.grid(column=0, row=8, sticky=W, pady=(20, 20), padx=(0, 5))
 
     process = StringVar()
