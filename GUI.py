@@ -19,17 +19,6 @@ session_menu['values'] = {}
 session_menu['temp'] = []
 
 
-# this could be used if user data is retrievable through the program
-def define_users():
-    """
-    """
-    id_list = []
-    for id in id_list:
-        d[id] = {}
-        d[id]['Filenames'] = []
-        session_menu['values'] = []
-
-
 def design_window():
     """Contains submodules to generate GUI window and generate necessary
     functionality.
@@ -40,18 +29,17 @@ def design_window():
         """Actions performed when the enter button is clicked
 
         """
-        define_users()
         file_list.delete(0, 'end')
         user = user_id.get()
         if user == '':
             messagebox.showerror('Error - Missing Field',
                                  'Please enter a valid User ID!')
         elif user not in d:
-            messagebox.showinfo('New User')
+            messagebox.showinfo('New User', 'New user ID entered.')
             d[user] = {}
             d[user]['Filenames'] = []
         else:
-            messagebox.showinfo('Returning User')
+            messagebox.showinfo('Returning User', 'Existing user ID entered.')
 
     def calibrate_btn_action():
         """Actions performed when the calibrate button is clicked
@@ -65,6 +53,8 @@ def design_window():
             messagebox.showerror('Error - Missing User',
                                  'User not in database, make sure to click '
                                  'enter after adding ID!')
+        messagebox.showinfo('CALIBRATE', 'Calibrating system.')
+
 
 
     def start_btn_action():
@@ -88,7 +78,6 @@ def design_window():
 
         """
         user = user_id.get()
-        dtype = download_type.get()
         if user == '':
             messagebox.showerror('Error - Missing Field',
                                  'Please enter a valid User ID!')
@@ -102,7 +91,6 @@ def design_window():
 
         """
         user = user_id.get()
-        dtype = download_type.get()
         if user == '':
             messagebox.showerror('Error - Missing Field',
                                  'Please enter a valid User ID!')
@@ -110,6 +98,8 @@ def design_window():
             messagebox.showerror('Error - Missing User',
                                  'User not in database, make sure to click '
                                  'enter after adding ID!')
+
+
 
 
     def close_btn_action():
@@ -126,24 +116,24 @@ def design_window():
         """
         """
         # insert code to start recording
-        messagebox.showinfo('Measurements started.')
+        messagebox.showinfo('START', 'Measurements started.')
         root.mainloop()
         return
 
 
-    def stop_rec(user, dtype):
+    def stop_rec(user):
         """
         """
         # insert code to stop recording
-        messagebox.showinfo('Measurements stopped.')
+        messagebox.showinfo('STOP', 'Measurements stopped.')
         root.mainloop()
         return
 
-    def download_data(user, dtype):
+    def download_data(user):
         """
         """
         # insert code to download database
-        messagebox.showinfo('Data has been exported.')
+        messagebox.showinfo('EXPORT', 'Data has been exported.')
         root.mainloop()
         return
 
@@ -167,25 +157,6 @@ def design_window():
         for val in reslist:
             selected.append(val)
         return selected
-
-# we may not need this
-    def refresh():
-        """Refresh user information
-
-        """
-        user = user_id.get()
-        users = []
-        if user == '':
-            messagebox.showerror('Error - Missing Field',
-                                 'Please enter a valid User ID')
-
-        else:
-            define_users()
-            filelist = []
-            for val in filelist:
-                if val not in session_menu['temp']:
-                    file_list.insert(END, val)
-                    session_menu['temp'] += (val,)
 
 
     def plot_action():
@@ -217,7 +188,7 @@ def design_window():
 # WINDOW DESIGN
     root = Tk()
     root.title("Measurect GUI")
-    root.geometry('800x400')
+    root.geometry('600x400')
 
     # USER ID FIELD (REQUIRED):
     user_label = ttk.Label(root, text="User ID:")
@@ -258,9 +229,6 @@ def design_window():
     file_list = Listbox(root, selectmode=MULTIPLE, width=45, height=5)
     file_list.grid(column=1, row=6, sticky=W, columnspan=2, pady=(20, 20))
 
-    refresh_btn = ttk.Button(root, text="Refresh", command=refresh)
-    refresh_btn.grid(column=1, row=7, sticky=W)
-
     process_label = ttk.Label(root, text="Drop-Down Menu:")
     process_label.grid(column=0, row=8, sticky=W, pady=(20, 20), padx=(0, 5))
 
@@ -282,6 +250,7 @@ def plot_data(xdata, ydata):
     rig = SWV_to_rig(0)
     plt.plot(([1, 2, 3, 4, 5], [1, 2, 3, 4, 5]))
     plt.show()
+    return
 
 
 def main():
