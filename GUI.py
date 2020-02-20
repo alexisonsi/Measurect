@@ -20,13 +20,9 @@ session_menu['values'] = {}
 session_menu['temp'] = []
 
 
+# this could be used if user data is retrievable through the program
 def define_users():
-    """Generates list of users still in database
-
-    This feature pulls a list of all the users currently in the database. A
-    dictionary is created for each of these users and the key 'Filenames' is
-    added to each users dictionary. This dictionary is used as a placeholder
-    before everything is added to the database.
+    """
     """
     id_list = []
     for id in id_list:
@@ -52,13 +48,11 @@ def design_window():
             messagebox.showerror('Error - Missing Field',
                                  'Please enter a valid User ID!')
         elif user not in d:
-            messagebox.showinfo('New User',
-                                'Welcome! Upload a picture to begin!')
+            messagebox.showinfo('New User')
             d[user] = {}
             d[user]['Filenames'] = []
         else:
-            messagebox.showinfo('Returning User',
-                                'Welcome back! Upload or view your images!')
+            messagebox.showinfo('Returning User')
 
     def calibrate_btn_action():
         """Actions performed when the calibrate button is clicked
@@ -103,9 +97,20 @@ def design_window():
             messagebox.showerror('Error - Missing User',
                                  'User not in database, make sure to click '
                                  'enter after adding ID!')
-        else:
-            user = user_id.get()
-            stop_rec(user, dtype)
+
+    def download_btn_action():
+        """Actions performed when the download button is clicked
+
+        """
+        user = user_id.get()
+        dtype = download_type.get()
+        if user == '':
+            messagebox.showerror('Error - Missing Field',
+                                 'Please enter a valid User ID!')
+        elif user not in d:
+            messagebox.showerror('Error - Missing User',
+                                 'User not in database, make sure to click '
+                                 'enter after adding ID!')
 
 
     def close_btn_action():
@@ -134,6 +139,14 @@ def design_window():
         root.mainloop()
         return
 
+    def download_data(user, dtype):
+        """
+        """
+        # insert code to download database
+        messagebox.showinfo('Data has been exported.')
+        root.mainloop()
+        return
+
     def select(): # this would give us the option to select multiple sessions
         """Select the highlighted files from the session box
 
@@ -159,9 +172,6 @@ def design_window():
     def refresh():
         """Refresh user information
 
-        This feature is used to refresh the user information, bringing up the
-        filenames saved in the database and appending the added files to
-        the menu.
         """
         user = user_id.get()
         users = []
@@ -223,22 +233,26 @@ def design_window():
     close_btn = ttk.Button(root, text='Close', command=close_btn_action)
     close_btn.grid(column=0, row=9, sticky=W, columnspan=1)
 
-    upload_btn = ttk.Button(root, text='Calibrate', command=calibrate_btn_action)
-    upload_btn.grid(column=0, row=1, sticky=W, columnspan=1)
+    calib_btn = ttk.Button(root, text='Calibrate', command=calibrate_btn_action)
+    calib_btn.grid(column=0, row=1, sticky=W, columnspan=1)
 
-    display_btn = ttk.Button(root, text='Start Readings', command=start_btn_action)
-    display_btn.grid(column=0, row=2, sticky=W, columnspan=1)
+    start_btn = ttk.Button(root, text='Start Readings', command=start_btn_action)
+    start_btn.grid(column=0, row=2, sticky=W, columnspan=1)
 
-    download_btn = ttk.Button(root, text='Stop Readings',
+    stop_btn = ttk.Button(root, text='Stop Readings',
                               command=stop_btn_action)
-    download_btn.grid(column=0, row=3, sticky=W, columnspan=1)
+    stop_btn.grid(column=0, row=3, sticky=W, columnspan=1)
 
-    histogram_btn = ttk.Button(root, text='Real-Time Graph', command=plot_action)
-    histogram_btn.grid(column=3, row=7, sticky=E, columnspan=1)
+    plot_btn = ttk.Button(root, text='Real-Time Graph', command=plot_action)
+    plot_btn.grid(column=3, row=7, sticky=E, columnspan=1)
+
+    download_btn = ttk.Button(root, text='Export Data',
+                                command=download_btn_action)
+    download_btn.grid(column=0, row=4, sticky=W, columnspan=1)
 
     # DEFINE DROPDOWNS:
-    image_label = ttk.Label(root, text="Sessions:")
-    image_label.grid(column=0, row=6, sticky=W, pady=(20, 20))
+    session_label = ttk.Label(root, text="Sessions:")
+    session_label.grid(column=0, row=6, sticky=W, pady=(20, 20))
 
     file_list = Listbox(root, selectmode=MULTIPLE, width=45, height=5)
     file_list.grid(column=1, row=6, sticky=W, columnspan=2, pady=(20, 20))
