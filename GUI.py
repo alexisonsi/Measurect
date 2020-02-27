@@ -58,8 +58,8 @@ def design_window():
 
 
 
-    def start_btn_action():
-        """Actions performed when the start button is clicked
+    def import_btn_action():
+        """Actions performed when the import button is clicked
 
         """
         user = user_id.get()
@@ -71,11 +71,11 @@ def design_window():
                                  'User not in database, make sure to click '
                                  'enter after adding ID!')
         else:
-            start_rec(user)
+            import_data(user)
 
 
-    def stop_btn_action():
-        """Actions performed when the stop button is clicked
+    def calc_btn_action():
+        """Actions performed when the calculate button is clicked
 
         """
         user = user_id.get()
@@ -87,7 +87,7 @@ def design_window():
                                  'User not in database, make sure to click '
                                  'enter after adding ID!')
         else:
-            stop_rec(user)
+            run_calc(user)
 
     def download_btn_action():
         """Actions performed when the download button is clicked
@@ -116,20 +116,20 @@ def design_window():
 
 
 # FEATURES OF BUTTON ACTIONS
-    def start_rec(user):
+    def import_data(user):
         """
         """
-        # insert code to start recording
-        messagebox.showinfo('START', 'Measurements started.')
+        # insert code to import data from Matlab
+        messagebox.showinfo('IMPORT', 'Measurements imported.')
         root.mainloop()
         return
 
 
-    def stop_rec(user):
+    def run_calc(user):
         """
         """
-        # insert code to stop recording
-        messagebox.showinfo('STOP', 'Measurements stopped.')
+        # insert code to run calculations
+        messagebox.showinfo('CALCULATE', 'Calculating.')
         root.mainloop()
         return
 
@@ -193,6 +193,7 @@ def design_window():
     root = Tk()
     root.title("Measurect GUI")
     root.geometry('600x400')
+    root.configure(background='linen')
 
     # USER ID FIELD (REQUIRED):
     user_label = ttk.Label(root, text="User ID:")
@@ -212,12 +213,12 @@ def design_window():
     calib_btn = ttk.Button(root, text='Calibrate', command=calibrate_btn_action)
     calib_btn.grid(column=0, row=1, sticky=W, columnspan=1)
 
-    start_btn = ttk.Button(root, text='Start Readings', command=start_btn_action)
-    start_btn.grid(column=0, row=2, sticky=W, columnspan=1)
+    import_btn = ttk.Button(root, text='Import Data', command=import_btn_action)
+    import_btn.grid(column=0, row=2, sticky=W, columnspan=1)
 
-    stop_btn = ttk.Button(root, text='Stop Readings',
-                              command=stop_btn_action)
-    stop_btn.grid(column=0, row=3, sticky=W, columnspan=1)
+    calc_btn = ttk.Button(root, text='Calculate Rigidity',
+                              command=calc_btn_action)
+    calc_btn.grid(column=0, row=3, sticky=W, columnspan=1)
 
     plot_btn = ttk.Button(root, text='Real-Time Graph', command=plot_action)
     plot_btn.grid(column=3, row=7, sticky=E, columnspan=1)
@@ -226,6 +227,7 @@ def design_window():
                                 command=download_btn_action)
     download_btn.grid(column=0, row=4, sticky=W, columnspan=1)
 
+
     # DEFINE DROPDOWNS:
     session_label = ttk.Label(root, text="Sessions:")
     session_label.grid(column=0, row=6, sticky=W, pady=(20, 20))
@@ -233,15 +235,14 @@ def design_window():
     file_list = Listbox(root, selectmode=MULTIPLE, width=45, height=5)
     file_list.grid(column=1, row=6, sticky=W, columnspan=2, pady=(20, 20))
 
-    process_label = ttk.Label(root, text="Drop-Down Menu:")
+    process_label = ttk.Label(root, text="Export Options:")
     process_label.grid(column=0, row=8, sticky=W, pady=(20, 20), padx=(0, 5))
 
     process = StringVar()
-    process.set('Option 1')
+    process.set('Export to LabChart')
     process_menu = ttk.Combobox(root, textvariable=process, width=30)
     process_menu.grid(column=1, row=8, sticky=W, columnspan=2, pady=(20, 20))
-    process_menu['values'] = ('Option 1', 'Option 2',
-                              'Option 3', 'Option 4')
+    process_menu['values'] = ('Export to LabChart', 'Export as CSV')
 
     root.mainloop()
     return
@@ -251,7 +252,9 @@ def plot_data(xdata, ydata):
     """
     """
     # need to decide what to call here
-    rig = SWV_to_rig(0)
+    time = [0, 1, 2, 3, 4, 5, 6, 7]
+    SWV = [1, 10, 3.4, 7.6, 8.1, 2, 4.5, 8.7, 9, 7]
+    SWV_to_rig(time, SWV)
     plt.plot(([1, 2, 3, 4, 5], [1, 2, 3, 4, 5]))
     plt.show()
     return
