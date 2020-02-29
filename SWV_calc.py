@@ -1,7 +1,8 @@
 def main():
     raw_input = data_in()
-    SWV = raw_to_SWV(raw_input)
-    rig = SWV_to_rig(SWV)
+    time = 0
+    SWV = raw_to_SWV(time, raw_input)
+    rig = SWV_to_rig(time, SWV)
     return rig
 
 
@@ -19,8 +20,11 @@ def raw_to_SWV(raw_input):
 def SWV_to_rig(SWV):
     rho = 1000 # kg/m^3
     rig = 3*rho*(SWV**2)
-    print(rig)
-    return rig
+    # rig = []
+    # for i in SWV:
+    #     hold = 3*rho*(SWV**2)
+    #     rig.append(hold)
+    # return time, rig
 
 
 
