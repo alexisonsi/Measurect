@@ -12,12 +12,22 @@ import io
 from matplotlib import pyplot as plt
 import matplotlib.image as mpimg
 from SWV_calc import *
+from file_conv import *
+from patient_data import *
 
 d = {}
 session_menu = {}
 session_menu['values'] = {}
 session_menu['temp'] = []
 
+
+def define_users():
+    id_list = retrieve_ids()
+    for id in id_list:
+        d[id] = {}
+        d[id]['Filenames'] = patient_files()
+        # file_list = d[id]['Filenames']
+        # session_menu['values'] = []
 
 def design_window():
     """Contains submodules to generate GUI window and generate necessary
@@ -27,8 +37,8 @@ def design_window():
     # BUTTON ACTIONS
     def enter_btn_action():
         """Actions performed when the enter button is clicked
-
         """
+        define_users()
         file_list.delete(0, 'end')
         user = user_id.get()
         if user == '':
@@ -40,22 +50,9 @@ def design_window():
             d[user]['Filenames'] = []
         else:
             messagebox.showinfo('Returning User', 'Existing user ID entered.')
-
-    def calibrate_btn_action():
-        """Actions performed when the calibrate button is clicked
-
-        """
-        user = user_id.get()
-        if user == '':
-            messagebox.showerror('Error - Missing Field',
-                                 'Please enter a valid User ID!')
-        elif user not in d:
-            messagebox.showerror('Error - Missing User',
-                                 'User not in database, make sure to click '
-                                 'enter after adding ID!')
-        else:
-            messagebox.showinfo('CALIBRATE', 'Calibrating system.')
-
+            d[user] = {}
+            d[user]['Filenames'] = patient_files(user)
+            session_menu['values'] = d[user]['Filenames']
 
 
     def import_btn_action():
@@ -119,16 +116,19 @@ def design_window():
     def import_data(user):
         """
         """
-        # insert code to import data from Matlab
+        data = import_from_Matlab
         messagebox.showinfo('IMPORT', 'Measurements imported.')
         root.mainloop()
-        return
+        return data
 
 
     def run_calc(user):
         """
         """
-        # insert code to run calculations
+        # retrive from user file... want to append calculations to a list
+        data = 0
+        SWV = raw_to_SWV(data)
+        rig = SWV_to_rig(SWV)
         messagebox.showinfo('CALCULATE', 'Calculating.')
         root.mainloop()
         return
@@ -136,12 +136,29 @@ def design_window():
     def download_data(user):
         """
         """
-        # insert code to download database
-        messagebox.showinfo('EXPORT', 'Data has been exported.')
+        user = user_id.get()
+        selected = select()
+        dtype = download_type.get()
+        if user is '':
+            messagebox.showerror('Error - Missing Field',
+                                 'Please enter a valid User ID!')
+        elif user not in d:
+            messagebox.showerror('Error - Missing User',
+                                 'User not in database, make sure to click '
+                                 'enter after adding ID!')
+        elif selected == '':
+            messagebox.showerror('Error', 'Please select images.')
+            return
+        elif len(selected) > 0:
+            if dtype == "CSV":
+                to_CSV(selected)
+                messagebox.showinfo('EXPORT', 'Data has been exported.')
+            elif dtype == "LabChart":
+                to_LabChart(selected)
+                messagebox.showinfo('EXPORT', 'Data has been exported.')
         root.mainloop()
-        return
 
-    def select(): # this would give us the option to select multiple sessions
+    def select():
         """Select the highlighted files from the session box
 
         This saves all the selected files in the file box so that the user
@@ -149,15 +166,15 @@ def design_window():
 
         Returns
         -------
-        list
+        download_type
             Contains list of all files selected
         """
         reslist = list()
         selected = []
         seleccion = file_list.curselection()
         for i in seleccion:
-            entrada = file_list.get(i)
-            reslist.append(entrada)
+            session_files = file_list.get(i)
+            reslist.append(session_files)
         for val in reslist:
             selected.append(val)
         return selected
@@ -175,18 +192,18 @@ def design_window():
             messagebox.showerror('Error - Missing User',
                                  'User not in database, make sure to click '
                                  'enter after adding ID!')
-        # elif selected == '':
-        #     messagebox.showerror('Error', 'Please select images.')
-        #     return
-        # elif len(selected) > 0:
-        #     if len(selected) > 1:
-        #         messagebox.showerror('Error - Multiple Files',
-        #                              'Please select only one file!')
-            # else:
-                # enter code for real-time plotting here
-        xdata = [1, 2, 3, 4, 5]
-        ydata = [1, 2, 3, 4, 5]
-        plot_data(xdata, ydata)
+        elif selected == '':
+            messagebox.showerror('Error', 'Please select images.')
+            return
+        elif len(selected) > 0:
+            if len(selected) > 1:
+                messagebox.showerror('Error - Multiple Files',
+                                     'Please select only one file!')
+            else:
+                # enter code for real-time plotting here!!
+                xdata = [1, 2, 3, 4, 5]
+                ydata = [1, 2, 3, 4, 5]
+                plot_data(xdata, ydata)
 
 
 # WINDOW DESIGN
@@ -210,9 +227,6 @@ def design_window():
     close_btn = ttk.Button(root, text='Close', command=close_btn_action)
     close_btn.grid(column=0, row=9, sticky=W, columnspan=1)
 
-    calib_btn = ttk.Button(root, text='Calibrate', command=calibrate_btn_action)
-    calib_btn.grid(column=0, row=1, sticky=W, columnspan=1)
-
     import_btn = ttk.Button(root, text='Import Data', command=import_btn_action)
     import_btn.grid(column=0, row=2, sticky=W, columnspan=1)
 
@@ -235,14 +249,14 @@ def design_window():
     file_list = Listbox(root, selectmode=MULTIPLE, width=45, height=5)
     file_list.grid(column=1, row=6, sticky=W, columnspan=2, pady=(20, 20))
 
-    process_label = ttk.Label(root, text="Export Options:")
-    process_label.grid(column=0, row=8, sticky=W, pady=(20, 20), padx=(0, 5))
+    download_type_label = ttk.Label(root, text="Export Options:")
+    download_type_label.grid(column=0, row=8, sticky=W, pady=(20, 20), padx=(0, 5))
 
-    process = StringVar()
-    process.set('Export to LabChart')
-    process_menu = ttk.Combobox(root, textvariable=process, width=30)
-    process_menu.grid(column=1, row=8, sticky=W, columnspan=2, pady=(20, 20))
-    process_menu['values'] = ('Export to LabChart', 'Export as CSV')
+    download_type = StringVar()
+    download_type.set('Export to LabChart')
+    download_type_menu = ttk.Combobox(root, textvariable=download_type, width=30)
+    download_type_menu.grid(column=1, row=8, sticky=W, columnspan=2, pady=(20, 20))
+    download_type_menu['values'] = ('Export to LabChart', 'Export as CSV')
 
     root.mainloop()
     return
