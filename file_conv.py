@@ -11,11 +11,19 @@ def export_data(data):
 
 
 def to_csv(data):
-    print("Convert to csv")
+    if len(data) == 1:
+        print("Convert to csv")
+    else:
+        for i in len(data):
+            print("Convert to csv")
 
 
 def to_LabChart(data):
-    print("Access LabChart")
+    if len(data) == 1:
+        print("Export to LabChart")
+    else:
+        for i in len(data):
+            print("Export to LabChart")
 
 
 if __name__ == '__main__':
