@@ -26,8 +26,7 @@ def define_users():
     for id in id_list:
         d[id] = {}
         d[id]['Filenames'] = patient_files(id)
-        # file_list = d[id]['Filenames']
-        # session_menu['values'] = []
+        session_menu['values'] = []
 
 def design_window():
     """Contains submodules to generate GUI window and generate necessary
@@ -50,9 +49,6 @@ def design_window():
             d[user]['Filenames'] = []
         else:
             messagebox.showinfo('Returning User', 'Existing user ID entered.')
-            d[user] = {}
-            d[user]['Filenames'] = patient_files(user)
-            session_menu['values'] = d[user]['Filenames']
 
 
     def import_btn_action():
@@ -181,6 +177,31 @@ def design_window():
         return selected
 
 
+    def refresh():
+        """Refresh user information
+
+        This feature is used to refresh the user information, bringing up the
+        filenames saved in the database and appending the added files to
+        the image menu.
+        """
+        user = user_id.get()
+        users = retrieve_ids()
+        if user == '':
+            messagebox.showerror('Error - Missing Field',
+                                 'Please enter a valid User ID')
+        elif user not in users:
+            messagebox.showerror('Error - New User',
+                                 'New User, make sure to upload and refresh to'
+                                 ' view information!')
+        else:
+            define_users()
+            filelist = patient_files(user)
+            for val in filelist:
+                if val not in session_menu['temp']:
+                    file_list.insert(END, val)
+                    session_menu['temp'] += (val,)
+
+
     def plot_action():
         """ Real-time plotting of data
         """
@@ -248,7 +269,7 @@ def design_window():
     session_label.grid(column=0, row=6, sticky=W, pady=(20, 20))
 
     file_list = Listbox(root, selectmode=MULTIPLE, width=45, height=5)
-    file_list.grid(column=1, row=6, sticky=W, columnspan=2, pady=(20, 20))
+    file_list.grid(column=0, row=6, sticky=W, pady=(20, 20))
 
     download_type_label = ttk.Label(root, text="Export Options:")
     download_type_label.grid(column=0, row=8, sticky=W, pady=(20, 20), padx=(0, 5))
@@ -258,6 +279,10 @@ def design_window():
     download_type_menu = ttk.Combobox(root, textvariable=download_type, width=30)
     download_type_menu.grid(column=1, row=8, sticky=W, columnspan=2, pady=(20, 20))
     download_type_menu['values'] = ('Export to LabChart', 'Export as CSV')
+
+
+    refresh_btn = ttk.Button(root, text="Refresh", command=refresh)
+    refresh_btn.grid(column=1, row=9, sticky=W)
 
     root.mainloop()
     return
