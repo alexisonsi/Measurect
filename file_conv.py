@@ -16,6 +16,7 @@ def to_csv(data):
     else:
         for i in len(data):
             print("Convert to csv")
+    return
 
 
 def to_LabChart(data):
@@ -24,6 +25,7 @@ def to_LabChart(data):
     else:
         for i in len(data):
             print("Export to LabChart")
+    return
 
 
 if __name__ == '__main__':

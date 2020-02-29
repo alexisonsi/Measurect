@@ -25,7 +25,7 @@ def define_users():
     id_list = retrieve_ids()
     for id in id_list:
         d[id] = {}
-        d[id]['Filenames'] = patient_files()
+        d[id]['Filenames'] = patient_files(id)
         # file_list = d[id]['Filenames']
         # session_menu['values'] = []
 
@@ -157,6 +157,7 @@ def design_window():
                 to_LabChart(selected)
                 messagebox.showinfo('EXPORT', 'Data has been exported.')
         root.mainloop()
+        return
 
     def select():
         """Select the highlighted files from the session box
