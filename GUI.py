@@ -268,7 +268,7 @@ def design_window():
     session_label = ttk.Label(root, text="Sessions:")
     session_label.grid(column=0, row=6, sticky=W, pady=(20, 20))
 
-    file_list = Listbox(root, selectmode=MULTIPLE, width=45, height=5)
+    file_list = Listbox(root, selectmode=MULTIPLE, width=30, height=5)
     file_list.grid(column=0, row=6, sticky=W, pady=(20, 20))
 
     download_type_label = ttk.Label(root, text="Export Options:")
@@ -282,7 +282,7 @@ def design_window():
 
 
     refresh_btn = ttk.Button(root, text="Refresh", command=refresh)
-    refresh_btn.grid(column=1, row=9, sticky=W)
+    refresh_btn.grid(column=1, row=6, sticky=E)
 
     root.mainloop()
     return
