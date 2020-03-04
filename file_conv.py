@@ -13,7 +13,6 @@ def import_SWV():
         tSWVpairs.append(row)
     file.close()
     return tSWVpairs
-    return tSWVpairs
 
 
 def export_data(data):
