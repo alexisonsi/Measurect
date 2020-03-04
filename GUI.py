@@ -28,6 +28,7 @@ def define_users():
         d[id]['Filenames'] = patient_files(id)
         session_menu['values'] = []
 
+
 def design_window():
     """Contains submodules to generate GUI window and generate necessary
     functionality.
@@ -50,7 +51,6 @@ def design_window():
         else:
             messagebox.showinfo('Returning User', 'Existing user ID entered.')
 
-
     def import_btn_action():
         """Actions performed when the import button is clicked
 
@@ -65,7 +65,6 @@ def design_window():
                                  'enter after adding ID!')
         else:
             import_data(user)
-
 
     def calc_btn_action():
         """Actions performed when the calculate button is clicked
@@ -97,8 +96,6 @@ def design_window():
         else:
             download_data(user)
 
-
-
     def close_btn_action():
         """Action performed when the close button is clicked
 
@@ -116,7 +113,6 @@ def design_window():
         messagebox.showinfo('IMPORT', 'Measurements imported.')
         root.mainloop()
         return data
-
 
     def run_calc(user):
         """
@@ -176,7 +172,6 @@ def design_window():
             selected.append(val)
         return selected
 
-
     def refresh():
         """Refresh user information
 
@@ -200,7 +195,6 @@ def design_window():
                 if val not in session_menu['temp']:
                     file_list.insert(END, val)
                     session_menu['temp'] += (val,)
-
 
     def plot_action():
         """ Real-time plotting of data
@@ -249,20 +243,20 @@ def design_window():
     close_btn = ttk.Button(root, text='Close', command=close_btn_action)
     close_btn.grid(column=0, row=9, sticky=W, columnspan=1)
 
-    import_btn = ttk.Button(root, text='Import Data', command=import_btn_action)
+    import_btn = ttk.Button(root, text='Import Data',
+                            command=import_btn_action)
     import_btn.grid(column=0, row=2, sticky=W, columnspan=1)
 
     calc_btn = ttk.Button(root, text='Calculate Rigidity',
-                              command=calc_btn_action)
+                          command=calc_btn_action)
     calc_btn.grid(column=0, row=3, sticky=W, columnspan=1)
 
     plot_btn = ttk.Button(root, text='Real-Time Graph', command=plot_action)
     plot_btn.grid(column=3, row=7, sticky=E, columnspan=1)
 
     download_btn = ttk.Button(root, text='Export Data',
-                                command=download_btn_action)
+                              command=download_btn_action)
     download_btn.grid(column=0, row=4, sticky=W, columnspan=1)
-
 
     # DEFINE DROPDOWNS:
     session_label = ttk.Label(root, text="Sessions:")
@@ -272,14 +266,16 @@ def design_window():
     file_list.grid(column=0, row=6, sticky=W, pady=(20, 20))
 
     download_type_label = ttk.Label(root, text="Export Options:")
-    download_type_label.grid(column=0, row=8, sticky=W, pady=(20, 20), padx=(0, 5))
+    download_type_label.grid(column=0, row=8, sticky=W, pady=(20, 20),
+                             padx=(0, 5))
 
     download_type = StringVar()
     download_type.set('Export to LabChart')
-    download_type_menu = ttk.Combobox(root, textvariable=download_type, width=30)
-    download_type_menu.grid(column=1, row=8, sticky=W, columnspan=2, pady=(20, 20))
+    download_type_menu = ttk.Combobox(root, textvariable=download_type,
+                                      width=30)
+    download_type_menu.grid(column=1, row=8, sticky=W, columnspan=2,
+                            pady=(20, 20))
     download_type_menu['values'] = ('Export to LabChart', 'Export as CSV')
-
 
     refresh_btn = ttk.Button(root, text="Refresh", command=refresh)
     refresh_btn.grid(column=1, row=6, sticky=E)

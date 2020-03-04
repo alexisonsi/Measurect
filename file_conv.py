@@ -5,11 +5,12 @@ def import_SWV():
     #     rows.append(row)
     # file.close()
     # return rows
-    data = [] # receive from GUI code or local computer
+    data = []  # receive from GUI code or local computer
     return data
 
+
 def export_data(data):
-    x = "CSV" # this will receive input from GUI
+    x = "CSV"  # this will receive input from GUI
     if x == "CSV":
         to_csv(data)
     else:
