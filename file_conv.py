@@ -1,4 +1,10 @@
-def import_from_Matlab():
+def import_SWV():
+    # file = open(f'{cwd}/test_data/{csvname}.csv', 'r')
+    # test_data_file = csv.reader(file, delimiter=",")
+    # for row in test_data_file:
+    #     rows.append(row)
+    # file.close()
+    # return rows
     data = [] # receive from GUI code or local computer
     return data
 

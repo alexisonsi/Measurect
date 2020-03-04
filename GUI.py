@@ -112,7 +112,7 @@ def design_window():
     def import_data(user):
         """
         """
-        data = import_from_Matlab
+        data = import_SWV
         messagebox.showinfo('IMPORT', 'Measurements imported.')
         root.mainloop()
         return data
