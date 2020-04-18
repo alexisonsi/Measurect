@@ -43,13 +43,13 @@ def design_window():
         user = user_id.get()
         if user == '':
             messagebox.showerror('Error - Missing Field',
-                                 'Please enter a valid User ID!')
+                                 'Please enter a valid Patient ID!')
         elif user not in d:
-            messagebox.showinfo('New User', 'New user ID entered.')
+            messagebox.showinfo('New User', 'New patient ID entered.')
             d[user] = {}
             d[user]['Filenames'] = []
         else:
-            messagebox.showinfo('Returning User', 'Existing user ID entered.')
+            messagebox.showinfo('Returning User', 'Existing patient ID entered.')
 
     def import_btn_action():
         """Actions performed when the import button is clicked
@@ -58,7 +58,7 @@ def design_window():
         user = user_id.get()
         if user == '':
             messagebox.showerror('Error - Missing Field',
-                                 'Please enter a valid User ID!')
+                                 'Please enter a valid Patient ID!')
         elif user not in d:
             messagebox.showerror('Error - Missing User',
                                  'User not in database, make sure to click '
@@ -73,7 +73,7 @@ def design_window():
         user = user_id.get()
         if user == '':
             messagebox.showerror('Error - Missing Field',
-                                 'Please enter a valid User ID!')
+                                 'Please enter a valid patient ID!')
         elif user not in d:
             messagebox.showerror('Error - Missing User',
                                  'User not in database, make sure to click '
@@ -88,7 +88,7 @@ def design_window():
         user = user_id.get()
         if user == '':
             messagebox.showerror('Error - Missing Field',
-                                 'Please enter a valid User ID!')
+                                 'Please enter a valid patient ID!')
         elif user not in d:
             messagebox.showerror('Error - Missing User',
                                  'User not in database, make sure to click '
@@ -109,17 +109,17 @@ def design_window():
     def import_data(user):
         """
         """
-        data = import_SWV
+        tSWVpairs = import_SWV
         messagebox.showinfo('IMPORT', 'Measurements imported.')
         root.mainloop()
-        return data
+        return tSWVpairs
 
     def run_calc(user):
         """
         """
-        # retrive from user file... want to append calculations to a list
-        data = 0
-        SWV = raw_to_SWV(data)
+        SWV = []
+        for i in tSWVpairs:
+            SWV.append(tSWVpairs(i, 1))
         rig = SWV_to_rig(SWV)
         messagebox.showinfo('CALCULATE', 'Calculating.')
         root.mainloop()
@@ -133,7 +133,7 @@ def design_window():
         dtype = download_type.get()
         if user is '':
             messagebox.showerror('Error - Missing Field',
-                                 'Please enter a valid User ID!')
+                                 'Please enter a valid patient ID!')
         elif user not in d:
             messagebox.showerror('Error - Missing User',
                                  'User not in database, make sure to click '
@@ -183,7 +183,7 @@ def design_window():
         users = retrieve_ids()
         if user == '':
             messagebox.showerror('Error - Missing Field',
-                                 'Please enter a valid User ID')
+                                 'Please enter a valid patient ID')
         elif user not in users:
             messagebox.showerror('Error - New User',
                                  'New User, make sure to upload and refresh to'
@@ -203,7 +203,7 @@ def design_window():
         selected = select()
         if user is '':
             messagebox.showerror('Error - Missing Field',
-                                 'Please enter a valid User ID!')
+                                 'Please enter a valid patient ID!')
         elif user not in d:
             messagebox.showerror('Error - Missing User',
                                  'User not in database, make sure to click '
@@ -216,7 +216,6 @@ def design_window():
                 messagebox.showerror('Error - Multiple Files',
                                      'Please select only one file!')
             else:
-                # enter code for real-time plotting here!!
                 xdata = [1, 2, 3, 4, 5]
                 ydata = [1, 2, 3, 4, 5]
                 plot_data(xdata, ydata)
@@ -229,7 +228,7 @@ def design_window():
     root.configure(background='linen')
 
     # USER ID FIELD (REQUIRED):
-    user_label = ttk.Label(root, text="User ID:")
+    user_label = ttk.Label(root, text="Patient ID:")
     user_label.grid(column=0, row=0, pady=(5, 20), padx=(0, 5), sticky=W)
 
     user_id = StringVar()
@@ -251,7 +250,7 @@ def design_window():
                           command=calc_btn_action)
     calc_btn.grid(column=0, row=3, sticky=W, columnspan=1)
 
-    plot_btn = ttk.Button(root, text='Real-Time Graph', command=plot_action)
+    plot_btn = ttk.Button(root, text='Graph', command=plot_action)
     plot_btn.grid(column=3, row=7, sticky=E, columnspan=1)
 
     download_btn = ttk.Button(root, text='Export Data',
@@ -287,11 +286,7 @@ def design_window():
 def plot_data(xdata, ydata):
     """
     """
-    # need to decide what to call here
-    time = [0, 1, 2, 3, 4, 5, 6, 7]
-    SWV = [1, 10, 3.4, 7.6, 8.1, 2, 4.5, 8.7, 9, 7]
-    SWV_to_rig(time, SWV)
-    plt.plot(([1, 2, 3, 4, 5], [1, 2, 3, 4, 5]))
+    plt.plot((xdata, ydata))
     plt.show()
     return
 
